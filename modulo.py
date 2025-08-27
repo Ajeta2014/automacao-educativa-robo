@@ -12,4 +12,3 @@ class Modulo:
         st.sidebar.markdown("**Objetivos:**")
         for obj in self.objetivos:
             st.sidebar.markdown(f"- {obj}")
-v
