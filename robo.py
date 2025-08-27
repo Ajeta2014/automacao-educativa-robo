@@ -1,15 +1,12 @@
-from PIL import Image, ImageDraw
-import streamlit as st
-
 class Robo:
     def __init__(self, grid_size=10):
         self.x = 0
         self.y = 0
         self.grid_size = grid_size
+        self.direcao = "N"
         self.trajetoria = [(self.x, self.y)]
         self.pontos = 0
         self.colisoes = 0
-        self.direcao = "N"  # N, S, E, W, NE, NW, SE, SW
 
     def move(self, direcao, obstaculos=None):
         dx, dy = 0, 0
@@ -33,7 +30,8 @@ class Robo:
 
     def reset(self):
         self.x, self.y = 0, 0
+        self.direcao = "N"
         self.trajetoria = [(self.x, self.y)]
         self.pontos = 0
         self.colisoes = 0
-        self.direcao = "N"
+"
