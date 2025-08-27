@@ -17,37 +17,26 @@ game = st.session_state.game
 
 # Definição dos módulos
 modulos = {
-    "0-Fundamentos": Modulo(
-        "0-Fundamentos",
-        "Aprender matemática, física e ciência da computação aplicadas à robótica.",
-        ["Compreender vetores, matrizes e transformações.",
-         "Entender cinemática e dinâmica.",
-         "Aprender programação e controle básico de robôs."]),
-    "1-Movimento": Modulo(
-        "1-Movimento",
-        "Controlar o robô em todas as direções e diagonais.",
-        ["Mover para frente, trás, esquerda, direita e diagonais.",
-         "Evitar obstáculos e completar trajetórias."]),
-    "2-Sensores": Modulo(
-        "2-Sensores",
-        "Aprender como o robô percebe o ambiente.",
-        ["Detectar obstáculos com sensores.",
-         "Seguir linhas e mapear trajetórias."]),
-    "3-Planejamento": Modulo(
-        "3-Planejamento",
-        "Planejar caminhos eficientes e seguros.",
-        ["Planejar rota do ponto A ao B evitando obstáculos.",
-         "Otimizar trajetória."]),
-    "4-Autônomo": Modulo(
-        "4-Autônomo",
-        "Programar o robô para agir sozinho.",
-        ["Evitar obstáculos automaticamente.",
-         "Seguir linhas e cumprir objetivos sem intervenção."]),
-    "5-IA": Modulo(
-        "5-IA",
-        "Introdução à decisão baseada em dados e padrões.",
-        ["Reconhecer padrões e cores.",
-         "Escolher melhor rota e coletar objetos virtuais."])
+    "0-Fundamentos": Modulo("0-Fundamentos","Aprender matemática, física e ciência da computação aplicadas à robótica.",
+                             ["Compreender vetores, matrizes e transformações.",
+                              "Entender cinemática e dinâmica.",
+                              "Aprender programação e controle básico de robôs."]),
+    "1-Movimento": Modulo("1-Movimento","Controlar o robô em todas as direções e diagonais.",
+                           ["Mover para frente, trás, esquerda, direita e diagonais.",
+                            "Evitar obstáculos e completar trajetórias."]),
+    "2-Sensores": Modulo("2-Sensores","Aprender como o robô percebe o ambiente.",
+                          ["Detectar obstáculos com sensores.",
+                           "Seguir linhas e mapear trajetórias."]),
+
+    "3-Planejamento": Modulo("3-Planejamento","Planejar caminhos eficientes e seguros.",
+                             ["Planejar rota do ponto A ao B evitando obstáculos.",
+                              "Otimizar trajetória."]),
+    "4-Autônomo": Modulo("4-Autônomo","Programar o robô para agir sozinho.",
+                          ["Evitar obstáculos automaticamente.",
+                           "Seguir linhas e cumprir objetivos sem intervenção."]),
+    "5-IA": Modulo("5-IA","Introdução à decisão baseada em dados e padrões.",
+                   ["Reconhecer padrões e cores.",
+                    "Escolher melhor rota e coletar objetos virtuais."])
 }
 
 # Ambientes distintos por módulo
@@ -67,9 +56,10 @@ modulos[modulo].mostrar_info()
 
 # Função de movimento
 def move_robo(direcao):
-    robo.move(direcao, obstaculos=ambientes[modulo].obstaculos)
+    if modulo != "0-Fundamentos":
+        robo.move(direcao, obstaculos=ambientes[modulo].obstaculos)
 
-# Módulo teórico
+# Teoria e quiz
 if modulo == "0-Fundamentos":
     fund.mostrar()
     fund.quiz()
