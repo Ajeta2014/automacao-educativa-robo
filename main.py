@@ -1,57 +1,40 @@
 import streamlit as st
-from robo import Robo
-from ambiente import Ambiente
-from fundamentos import Fundamentos
-from gamificacao import Gamificacao
+import random
 
-# Inicializar robô no session_state
-if "robo" not in st.session_state:
-    st.session_state.robo = Robo()
-robo = st.session_state.robo
+class Fundamentos:
+    def mostrar(self):
+        st.subheader("Módulo 0 – Fundamentos Teóricos")
+        st.markdown("""
+        ### 🔹 Matemática
+        - Álgebra Linear: vetores, matrizes, rotações
+        - Trigonometria: seno, cosseno, tangente
+        - Cálculo Diferencial: velocidade, aceleração
+        - Estatística: ruído de sensores
+        
+        ### 🔹 Física
+        - Cinemática: movimento de corpos
+        - Dinâmica: forças, torque, leis de Newton
+        - Eletrônica: motores e atuadores
+        
+        ### 🔹 Ciência da Computação
+        - Programação: Python, C++, ROS
+        - Controle: PID, sensores, atuadores
+        - IA: visão computacional, navegação
+        """)
 
-# Inicializar ambiente e classes auxiliares
-if "amb" not in st.session_state:
-    st.session_state.amb = Ambiente(obstaculos=[(4,4),(6,6)], linha=[(0,0),(1,1),(2,2),(3,3),(4,4),(5,5)])
-amb = st.session_state.amb
+    def quiz(self):
+        st.markdown("### 📝 Quiz aleatório")
+        perguntas = [
+            {"pergunta": "Qual lei de Newton explica ação e reação?", "opcoes": ["1ª Lei", "2ª Lei", "3ª Lei"], "resposta": "3ª Lei"},
+            {"pergunta": "Seno, cosseno e tangente são usados em qual área da robótica?", "opcoes": ["Matemática", "Física", "IA"], "resposta": "Matemática"},
+            {"pergunta": "Qual sensor é usado para medir distância?", "opcoes": ["Ultrassônico", "Servo", "Motor"], "resposta": "Ultrassônico"},
+            {"pergunta": "O que é PID?", "opcoes": ["Controlador", "Motor", "Sensor"], "resposta": "Controlador"}
+        ]
+        pergunta = random.choice(perguntas)
+        escolha = st.radio(pergunta["pergunta"], pergunta["opcoes"])
+        if escolha == pergunta["resposta"]:
+            st.success("✅ Correto!")
+        elif escolha:
+            st.warning("❌ Tente novamente.")
 
-if "fund" not in st.session_state:
-    st.session_state.fund = Fundamentos()
-fund = st.session_state.fund
-
-if "game" not in st.session_state:
-    st.session_state.game = Gamificacao()
-game = st.session_state.game
-
-st.title("🚀 Mini Laboratório de Robótica – Completo e Gamificado")
-
-# Menu lateral
-modulo = st.sidebar.selectbox("Escolha o módulo", 
-                              ["0-Fundamentos","1-Movimento","2-Sensores",
-                               "3-Planejamento","4-Autônomo","5-IA"])
-
-# Função para atualizar movimento
-def move_robo(direcao):
-    robo.move(direcao, obstaculos=amb.obstaculos)
-
-# Módulo 0 – Teoria e Quiz
-if modulo == "0-Fundamentos":
-    fund.mostrar()
-    fund.quiz()
-
-# Outros módulos – Movimento + Gamificação
-else:
-    game.mostrar(robo)
-    amb.desenha(robo)
-
-    col1, col2, col3, col4, col5, col6, col7, col8 = st.columns(8)
-    if col1.button("N"): move_robo("N")
-    if col2.button("S"): move_robo("S")
-    if col3.button("E"): move_robo("E")
-    if col4.button("W"): move_robo("W")
-    if col5.button("NE"): move_robo("NE")
-    if col6.button("NW"): move_robo("NW")
-    if col7.button("SE"): move_robo("SE")
-    if col8.button("SW"): move_robo("SW")
-
-    if st.button("Reset"): robo.reset()
 
