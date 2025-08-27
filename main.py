@@ -30,7 +30,6 @@ modulo = st.sidebar.selectbox("Escolha o módulo",
                               ["0-Fundamentos","1-Movimento","2-Sensores","3-Planejamento","4-Autônomo","5-IA"])
 
 # Função de movimento
-# Função de movimento
 def move_robo(direcao):
     robo.move(direcao, obstaculos=ambientes[modulo].obstaculos)
 
