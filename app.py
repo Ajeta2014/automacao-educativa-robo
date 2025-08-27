@@ -1,3 +1,4 @@
+
 import streamlit as st
 import matplotlib.pyplot as plt
 import numpy as np
@@ -40,34 +41,65 @@ class Robo:
     def turn_right(self):
         self.direcao = (self.direcao + 1) % 4
 
+    def sensor_frontal(self, ambiente):
+        """Simula um sensor ultrassônico que detecta distância até o obstáculo à frente"""
+        distancia = 0
+        x, y = self.x, self.y
+
+        while True:
+            if self.direcao == 0:  # Norte
+                y += 1
+            elif self.direcao == 1:  # Leste
+                x += 1
+            elif self.direcao == 2:  # Sul
+                y -= 1
+            elif self.direcao == 3:  # Oeste
+                x -= 1
+
+            # Verifica se saiu do grid
+            if not (0 <= x < self.grid_size and 0 <= y < self.grid_size):
+                break
+
+            distancia += 1
+
+            # Se encontrou obstáculo
+            if ambiente[y, x] == 1:
+                break
+
+        return distancia
+
 
 # ==============================
 # Função para desenhar ambiente
 # ==============================
-def desenha_ambiente(robo, ambiente):
+def desenha_ambiente(robo, ambiente, distancia_sensor):
     plt.clf()
     plt.imshow(ambiente, cmap="binary", origin="lower")
 
-    # Desenhar trajetória
+    # Trajetória
     trajetoria_x, trajetoria_y = zip(*robo.trajetoria)
     plt.plot(trajetoria_x, trajetoria_y, "b--", linewidth=1, label="Trajetória")
 
     # Robô
     plt.scatter(robo.x, robo.y, c="red", s=200, label="Robô", edgecolors="black", marker="o")
 
-    # Direção do robô
+    # Direção do robô + sensor
     if robo.direcao == 0:  # Norte
         dx, dy = 0, 0.5
+        plt.plot([robo.x, robo.x], [robo.y, robo.y + distancia_sensor], "g-", linewidth=2, label="Sensor")
     elif robo.direcao == 1:  # Leste
         dx, dy = 0.5, 0
+        plt.plot([robo.x, robo.x + distancia_sensor], [robo.y, robo.y], "g-", linewidth=2, label="Sensor")
     elif robo.direcao == 2:  # Sul
         dx, dy = 0, -0.5
+        plt.plot([robo.x, robo.x], [robo.y, robo.y - distancia_sensor], "g-", linewidth=2, label="Sensor")
     else:  # Oeste
         dx, dy = -0.5, 0
+        plt.plot([robo.x, robo.x - distancia_sensor], [robo.y, robo.y], "g-", linewidth=2, label="Sensor")
 
     plt.arrow(robo.x, robo.y, dx, dy, head_width=0.3, head_length=0.2, fc="red", ec="red")
 
-    plt.title("Simulador de Robô - Automação Inteligente")
+    plt.title("🤖 Simulador de Robô com Sensor Ultrassônico")
     plt.legend()
     st.pyplot(plt)
 
@@ -76,16 +108,17 @@ def desenha_ambiente(robo, ambiente):
 # Aplicação principal Streamlit
 # ==============================
 def main():
-    st.title("🤖 Simulador de Robô - Controle e Automação")
+    st.title("🤖 Simulador de Robô com Sensores - Controle e Automação")
 
     # Configuração inicial
     grid_size = st.sidebar.slider("Tamanho do ambiente (NxN)", 5, 20, 10)
 
-    # Criar ambiente com obstáculos fixos (poderia ser aleatório)
+    # Criar ambiente
     if "ambiente" not in st.session_state or st.session_state.grid_size != grid_size:
         ambiente = np.zeros((grid_size, grid_size))
         ambiente[4, 4] = 1
         ambiente[6, 6] = 1
+        ambiente[2, 7] = 1
         st.session_state.ambiente = ambiente
         st.session_state.grid_size = grid_size
         st.session_state.robo = Robo(grid_size)
@@ -93,28 +126,39 @@ def main():
     ambiente = st.session_state.ambiente
     robo = st.session_state.robo
 
+    # Medir distância do sensor
+    distancia_sensor = robo.sensor_frontal(ambiente)
+
     # Exibir ambiente
-    desenha_ambiente(robo, ambiente)
+    desenha_ambiente(robo, ambiente, distancia_sensor)
+
+    # Mostrar leitura do sensor
+    st.metric("📡 Distância até obstáculo à frente", f"{distancia_sensor} células")
 
     # Controles
     st.sidebar.subheader("Controles do Robô")
     if st.sidebar.button("⬆️ Mover para Frente"):
         robo.move_forward(ambiente)
-        desenha_ambiente(robo, ambiente)
+        distancia_sensor = robo.sensor_frontal(ambiente)
+        desenha_ambiente(robo, ambiente, distancia_sensor)
 
     col1, col2 = st.sidebar.columns(2)
     if col1.button("⬅️ Esquerda"):
         robo.turn_left()
-        desenha_ambiente(robo, ambiente)
+        distancia_sensor = robo.sensor_frontal(ambiente)
+        desenha_ambiente(robo, ambiente, distancia_sensor)
     if col2.button("➡️ Direita"):
         robo.turn_right()
-        desenha_ambiente(robo, ambiente)
+        distancia_sensor = robo.sensor_frontal(ambiente)
+        desenha_ambiente(robo, ambiente, distancia_sensor)
 
     if st.sidebar.button("🔄 Resetar Robô"):
         st.session_state.robo = Robo(grid_size)
-        desenha_ambiente(st.session_state.robo, ambiente)
+        distancia_sensor = st.session_state.robo.sensor_frontal(ambiente)
+        desenha_ambiente(st.session_state.robo, ambiente, distancia_sensor)
 
 
 # ==============================
 if __name__ == "__main__":
     main()
+
