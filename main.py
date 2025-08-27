@@ -37,7 +37,7 @@ if modulo == "0-Fundamentos":
     fund.mostrar()
     fund.quiz()
 else:
-    ambentes[modulo].desenha(robo)
+    ambIentes[modulo].desenha(robo)
     game.mostrar(robo)
 
     col1, col2, col3, col4, col5, col6, col7, col8 = st.columns(8)
