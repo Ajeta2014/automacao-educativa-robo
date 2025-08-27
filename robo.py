@@ -30,3 +30,4 @@ class Robo:
         self.trajetoria = [(self.x, self.y)]
         self.pontos = 0
         self.colisoes = 0
+
