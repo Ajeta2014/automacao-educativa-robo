@@ -30,14 +30,15 @@ modulo = st.sidebar.selectbox("Escolha o módulo",
                               ["0-Fundamentos","1-Movimento","2-Sensores","3-Planejamento","4-Autônomo","5-IA"])
 
 # Função de movimento
+# Função de movimento
 def move_robo(direcao):
-    robo.move(direcao, obstaculos=ambentes[modulo].obstaculos)
+    robo.move(direcao, obstaculos=ambientes[modulo].obstaculos)
 
 if modulo == "0-Fundamentos":
     fund.mostrar()
     fund.quiz()
 else:
-    ambIentes[modulo].desenha(robo)
+    ambientes[modulo].desenha(robo)
     game.mostrar(robo)
 
     col1, col2, col3, col4, col5, col6, col7, col8 = st.columns(8)
@@ -51,5 +52,6 @@ else:
     if col8.button("SW"): move_robo("SW")
 
     if st.button("Reset"): robo.reset()
+
 
 
