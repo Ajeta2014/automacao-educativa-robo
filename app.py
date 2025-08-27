@@ -29,26 +29,26 @@ class Robo:
         self.direcao = (self.direcao + 1) % 4
 
 # Função para desenhar o ambiente
-def desenha_ambiente(robo_pos):
+def desenha_ambiente(robo):
     ambiente = np.zeros((10, 10))  # Ambiente 10x10
     ambiente[4, 4] = 1  # Obstáculo
     ambiente[6, 6] = 1  # Obstáculo
     
-    # Desenhando o grid do ambiente
+    plt.clf()  # Limpa o gráfico anterior
     plt.imshow(ambiente, cmap="binary", origin="lower")
     
     # Marcando o robô no grid
-    plt.scatter(robo_pos[0], robo_pos[1], c="red", s=200, label="Robô", edgecolors="black", marker="o")
+    plt.scatter(robo.x, robo.y, c="red", s=200, label="Robô", edgecolors="black", marker="o")
     
     # Representando a direção do robô com uma seta
     if robo.direcao == 0:  # Norte
-        plt.arrow(robo_pos[0], robo_pos[1], 0, 0.4, head_width=0.2, head_length=0.2, fc='red', ec='red')
+        plt.arrow(robo.x, robo.y, 0, 0.4, head_width=0.2, head_length=0.2, fc='red', ec='red')
     elif robo.direcao == 1:  # Leste
-        plt.arrow(robo_pos[0], robo_pos[1], 0.4, 0, head_width=0.2, head_length=0.2, fc='red', ec='red')
+        plt.arrow(robo.x, robo.y, 0.4, 0, head_width=0.2, head_length=0.2, fc='red', ec='red')
     elif robo.direcao == 2:  # Sul
-        plt.arrow(robo_pos[0], robo_pos[1], 0, -0.4, head_width=0.2, head_length=0.2, fc='red', ec='red')
+        plt.arrow(robo.x, robo.y, 0, -0.4, head_width=0.2, head_length=0.2, fc='red', ec='red')
     elif robo.direcao == 3:  # Oeste
-        plt.arrow(robo_pos[0], robo_pos[1], -0.4, 0, head_width=0.2, head_length=0.2, fc='red', ec='red')
+        plt.arrow(robo.x, robo.y, -0.4, 0, head_width=0.2, head_length=0.2, fc='red', ec='red')
 
     plt.title("Simulador de Robô")
     plt.legend()
@@ -56,31 +56,29 @@ def desenha_ambiente(robo_pos):
 
 # Função para rodar a interface Streamlit
 def main():
-    # Título da página
     st.title("Simulador de Robô - Controle e Automação")
 
-    # Criação do robô
-    robo = Robo()
+    # Criar o robô (usando st.session_state para manter estado entre cliques)
+    if "robo" not in st.session_state:
+        st.session_state.robo = Robo()
 
-    # Definir posição inicial do robô
-    robo_pos = (robo.x, robo.y)
+    robo = st.session_state.robo
 
     # Exibir o ambiente
-    desenha_ambiente(robo_pos)
+    desenha_ambiente(robo)
 
     # Controle do robô através de botões
     if st.button("Mover para Frente"):
         robo.move_forward()
-        robo_pos = (robo.x, robo.y)
-        desenha_ambiente(robo_pos)
+        desenha_ambiente(robo)
 
     if st.button("Virar à Esquerda"):
         robo.turn_left()
-        desenha_ambiente(robo_pos)
+        desenha_ambiente(robo)
 
     if st.button("Virar à Direita"):
         robo.turn_right()
-        desenha_ambiente(robo_pos)
+        desenha_ambiente(robo)
 
 # Rodar a aplicação Streamlit
 if __name__ == "__main__":
