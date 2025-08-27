@@ -16,3 +16,4 @@ class Gamificacao:
             st.info("🥈 Medalha Prata – Bom desempenho")
         else:
             st.warning("🥉 Medalha Bronze – Continue praticando")
+
