@@ -2,12 +2,10 @@ class Robo:
     def __init__(self):
         self.x = 0
         self.y = 0
-        self.direcao = 0  # 0=N,1=E,2=S,3=W
         self.trajetoria = [(self.x, self.y)]
         self.pontos = 0
         self.colisoes = 0
 
-    # Movimentos básicos e diagonais
     def move(self, direcao, obstaculos=None, grid_size=10):
         dx, dy = 0, 0
         if direcao == "N": dy = 1
