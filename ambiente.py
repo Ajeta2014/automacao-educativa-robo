@@ -31,3 +31,4 @@ class Ambiente:
         plt.legend()
         st.pyplot(plt)
 
+
