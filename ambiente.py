@@ -27,13 +27,7 @@ class Ambiente:
 
         # Robô
         plt.scatter(robo.x, robo.y, c="red", s=200, edgecolors="black", marker="o", label="Robô")
-        dx, dy = 0, 0
-        if robo.direcao == 0: dy=0.4
-        elif robo.direcao == 1: dx=0.4
-        elif robo.direcao == 2: dy=-0.4
-        elif robo.direcao == 3: dx=-0.4
-        plt.arrow(robo.x, robo.y, dx, dy, head_width=0.2, head_length=0.2, fc='red', ec='red')
-
         plt.title("Mini Laboratório de Robótica")
         plt.legend()
         st.pyplot(plt)
+
